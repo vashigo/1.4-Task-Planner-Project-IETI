@@ -13,6 +13,8 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 
+import { Redirect } from 'react-router-dom';
+
 import Swal from 'sweetalert2'
 
 import './Login.css'
@@ -39,6 +41,8 @@ class Login extends Component{
             this.setState({isLoggedIn: false});
         }
         localStorage.setItem('username', "andres");
+        localStorage.setItem('name', "Andres Vasquez");
+        localStorage.setItem('email', "andres@gmail.com");
         localStorage.setItem('password', "12345");
     }
 
@@ -56,7 +60,6 @@ class Login extends Component{
             }else{
                 Swal.fire('Oops...', 'Usuario no esta registrado!!', 'error')
             }
-            
         }
     }
 
@@ -76,6 +79,7 @@ class Login extends Component{
 
         return (
             <React.Fragment>
+                {localStorage.getItem("isLoggedIn") === "true" && <Redirect to="/dashboard" />}
                 <CssBaseline />
                 <main className="layout">
                     <Paper className="paper">

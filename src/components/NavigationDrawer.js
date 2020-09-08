@@ -12,9 +12,14 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Button from '@material-ui/core/Button';
 
+import Container from '@material-ui/core/Container';
+
 import Card from '@material-ui/core/Card';
-import CardHeader from "@material-ui/core/CardHeader";
 import Avatar from "@material-ui/core/Avatar";
+
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -28,6 +33,8 @@ class NavigationDrawer extends Component {
         super(props);
         this.state = {
             open: false,
+            name: "",
+            email: ""
         }
 
         this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
@@ -47,6 +54,11 @@ class NavigationDrawer extends Component {
     logout(){
         Swal.fire('Hasta Luego', 'Cerró sesion exitosamente!!', 'success')
         this.props.signOff();
+    }
+
+    componentDidMount(){
+      this.setState({name : localStorage.getItem('name')})
+      this.setState({email : localStorage.getItem('email')})
     }
 
     render() {
@@ -89,20 +101,34 @@ class NavigationDrawer extends Component {
               </div>
 
               <Divider />
-              <Grid>
-              <Card className={classes.rootCard}>
-                <CardHeader
-                    className={classes.cardHeader}
-                    avatar={
-                    <Avatar aria-label="recipe" className={classes.avatar}>
-                        A
-                    </Avatar>
-                    }
-                    title="Andres Vasquez"
-                    subheader="andres@gmail.com"
-                />
-              </Card>
-              </Grid>
+              <Container fixed>
+   
+                <Card className={classes.rootCard}>
+                  
+                      <center>
+                      <Avatar aria-label="recipe" className={classes.avatar}>
+                          A
+                      </Avatar>
+                      </center>
+                      
+                      {this.state.name}
+                      <br></br>
+                      {this.state.email}
+                      <br></br>
+                      <Fab
+                        variant="extended"
+                        size="small"
+                        href="/tasks/dashboard/newuserprofile"
+                        aria-label="add"
+                        className={classes.fabEditProfile}
+                      >
+                        <EditIcon />
+                        Edit Profile
+                      </Fab>
+                  
+                </Card>
+
+              </Container>
              
             
                 {localStorage.getItem("isLoggedIn") === "true" &&
@@ -125,7 +151,15 @@ class NavigationDrawer extends Component {
               <div className={classes.drawerHeader} />
               <div>
               <MainViewCards></MainViewCards>
+              <Fab 
+              className={classes.fab} 
+              href="/tasks/dashboard/newtask"
+              color="primary" 
+              aria-label="add">
+                <AddIcon />
+              </Fab>
               </div>
+
             </main>
           </div>
         )
@@ -138,11 +172,23 @@ const styles = theme => ({
     root: {
         display: 'flex',
     },
+    fabEditProfile:{
+      color: "#1160DA",
+      marginBottom: "10px",
+      marginTop: "10px"
+    },
+    fab: {
+      position: 'fixed',
+      left: "right",
+      bottom: 50,
+      right:50
+    },
     rootCard: {
-        width: "auto",
-        alignItems: "center",
+        margin: "auto",
         alignContent: "center",
-        marginBottom: "100%"
+        marginBottom: "100%",
+        marginTop: "10px",
+        position: "sticky"
     },
     appBar: {
         transition: theme.transitions.create(['margin', 'width'], {
@@ -171,9 +217,7 @@ const styles = theme => ({
         width: drawerWidth,
         flexShrink: 0,
     },
-    cardHeader : {
-        margin: "auto"
-    },
+
     drawerPaper: {
         width: drawerWidth,
     },

@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
+import { BrowserRouter,Route, Switch, Redirect } from 'react-router-dom';
 
 import Login from '../src/components/Login';
 import NavigationDrawer from '../src/components/NavigationDrawer';
+import NewTask from '../src/components/NewTask';
+import UserProfile from '../src/components/UserProfile';
+
 
 class App extends Component {
 
@@ -26,7 +29,6 @@ class App extends Component {
   }
 
   async signOff() {
-    await localStorage.clear();
     await localStorage.setItem('isLoggedIn', false)
 
     this.setState({ isLoggedIn: false });
@@ -38,6 +40,14 @@ class App extends Component {
 
   render() {
 
+    const NewTaskView = () => (
+      <NewTask />
+    );
+
+    const NewUserProfile = () => (
+      <UserProfile />
+    );
+
     const LoginView = () => (
       <Login signIn={this.signIn} />
     );
@@ -47,17 +57,21 @@ class App extends Component {
     );
 
     return (
-      <Router>
+      <BrowserRouter basename="/tasks">
         <div className="App">
             <div>
-              {this.state.isLoggedIn && localStorage.getItem("isLoggedIn") === "true" ? <Redirect to="/dashboard" /> : <Redirect to="/" />}
+              {console.log("isslogged: ",localStorage.getItem("isLoggedIn"))}
+              {!this.state.isLoggedIn && localStorage.getItem("isLoggedIn") === "false" ? <Redirect to="/login" /> : null}
+              {localStorage.getItem("isLoggedIn") === null && <Redirect to="/login" />}
               <Switch>
-                <Route exact path="/" component={LoginView} />
+                <Route exact path="/login" component={LoginView} />
                 <Route exact path="/dashboard" component={NavigationDrawerView} />
+                <Route exact path="/dashboard/newtask" component={NewTaskView} /> 
+                <Route exact path="/dashboard/newuserprofile" component={NewUserProfile} />
               </Switch>
             </div>
         </div>
-      </Router>
+      </BrowserRouter>
     );
   }
 }

@@ -15,11 +15,16 @@ import AutorenewIcon from '@material-ui/icons/Autorenew';
 import AlarmOnIcon from '@material-ui/icons/AlarmOn';
 
 const items = [
-    {description: "some description text ",responsible: {name: "Santiago Carrillo",email: "sancarbar@gmail"},status: "Ready",dueDate: new Date().getDay() +"/"+ new Date().getMonth() +"/"+ new Date().getFullYear()},
     {description: "Implement Login View ",responsible: {name: "Santiago Carrillo",email: "sancarbar@gmail"},status: "Ready",dueDate: new Date().getDay() +"/"+ new Date().getMonth() +"/"+ new Date().getFullYear()},
     {description: "Implement Login Controller ",responsible: {name: "Santiago Carrillo",email: "sancarbar@gmail"},status: "Completed",dueDate: new Date().getDay() +"/"+ new Date().getMonth() +"/"+ new Date().getFullYear()},
     {description: "FaceBook Integration",responsible: {name: "Santiago Carrillo",email: "sancarbar@gmail"},status: "In Progress",dueDate: new Date().getDay() +"/"+ new Date().getMonth() +"/"+ new Date().getFullYear()},
 ]
+
+if(!localStorage.getItem('items')){  
+    localStorage.setItem('items', JSON.stringify(items));
+}
+
+// console.log('retrievedObject: ', JSON.parse(localStorage.getItem('items')));
 
 class MainViewCards extends Component {
 
@@ -27,7 +32,11 @@ class MainViewCards extends Component {
         super(props);
         this.state = {
             open: false,
+            tasks: []
         }
+    }
+    componentDidMount(){
+        this.setState({tasks : JSON.parse(localStorage.getItem('items'))})
     }
 
     render() {
@@ -35,7 +44,7 @@ class MainViewCards extends Component {
 
         return (
             <Grid className={classes.grid}>
-                {items.map((task,index) => {
+                {this.state.tasks.map((task,index) => {
                     return (
                         <center key={index}>
                         <Grid >
